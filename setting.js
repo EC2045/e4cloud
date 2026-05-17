@@ -71,6 +71,16 @@ window.E4_CLOUD_SETTINGS = {
             avatar: 'bart.png',
             status: 'FARM_MANAGER',
             description: 'ONVA中央農園・管理官（メイの父親）'
+        },
+        {
+            id: 'rittsu',
+            name: 'Rittsu (りっつー)',
+            icon: 'fas fa-laptop-code',
+            color: 'orange',
+            themeColor: '#f97316',
+            avatar: 'rittsu.png',
+            status: 'UNOFFICIAL_ACCESS',
+            description: 'フリーランスハッカー・Same-Art Writer R'
         }
     ],
 
@@ -111,6 +121,10 @@ window.E4_CLOUD_SETTINGS = {
             { name: `/bart/potato_farming_log.txt`, type: 'text', realPath: 'bart/potato_farming_log.txt' },
             { name: `/bart/about_may.txt`, type: 'text', realPath: 'bart/about_may.txt' },
             { name: `/bart/bart.png`, type: 'image', realPath: 'bart/bart.png' }
+        ],
+        rittsu: [
+            { name: `/rittsu/memo_about_may.txt`, type: 'text', realPath: 'rittsu/memo_about_may.txt' },
+            { name: `/rittsu/rittsu.png`, type: 'image', realPath: 'rittsu/rittsu.png' }
         ]
     }
 };
