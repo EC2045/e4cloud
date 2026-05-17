@@ -8,10 +8,20 @@
 
 window.E4_CLOUD_SETTINGS = {
     // パスワードリスト
-    validPasswords: ['admin', 'e4', '2045', 'r', 'aria', 'may', 'syuren', 'onva', 'wac', 'litaran', 'rittsu', 'rituto', 'Shun_00'],
+    validPasswords: ['admin', 'e4', '2045', 'r', 'aria', 'may', 'syuren', 'onva', 'wac', 'litaran', 'rittsu', 'rituto', 'Shun_00', 'murinsu', 'kgar'],
 
     // アーカイブアカウントのメタデータ
     archives: [
+        {
+            id: 'ts',
+            name: 'T.S.',
+            icon: 'fas fa-question',
+            color: 'pink',
+            themeColor: '#ff3366',
+            avatar: 'ts.png',
+            status: 'IDENTITY_UNCERTAIN',
+            description: '架空疑問展・和音王国（自称）管理者 T.S. のアーカイブ'
+        },
         {
             id: 'aria',
             name: 'Aria (アリア)',
@@ -41,16 +51,6 @@ window.E4_CLOUD_SETTINGS = {
             avatar: 'syuren.png',
             status: 'HIGHLY_STABLE',
             description: '職人シュレンの技術研究データ'
-        },
-        {
-            id: 'ts',
-            name: 'T.S.',
-            icon: 'fas fa-question',
-            color: 'pink',
-            themeColor: '#ff3366',
-            avatar: 'ts.png',
-            status: 'IDENTITY_UNCERTAIN',
-            description: '架空疑問展・和音王国（自称）管理者 T.S. のアーカイブ'
         },
         {
             id: 'evil',
@@ -249,6 +249,8 @@ window.E4_CLOUD_SETTINGS = {
         ],
         rittsu: [
             { name: `/rittsu/memo_about_may.txt`, type: 'text', realPath: 'rittsu/memo_about_may.txt' },
+            { name: `/rittsu/about_z_sand.txt`, type: 'text', realPath: 'rittsu/about_z_sand.txt' },
+            { name: `/rittsu/encounter_with_aria.txt`, type: 'text', realPath: 'rittsu/encounter_with_aria.txt' },
             { name: `/rittsu/rittsu.png`, type: 'image', realPath: 'rittsu/rittsu.png' }
         ],
         litaran: [
