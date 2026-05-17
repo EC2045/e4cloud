@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E4 CLOUD SERVICE - SECURE PORTAL</title>
+
+    <!-- OGP Tags -->
+    <meta property="og:title" content="E4 CLOUD SERVICE - SECURE PORTAL">
+    <meta property="og:description" content="内部管理者用・暗号化データストレージ。物理フォルダからの動的スキャンに対応。">
+    <meta property="og:type" content="website">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Courier+Prime&family=Inter:wght@300;400;700&family=Noto+Sans+JP:wght@300;400;700&display=swap');
+
+        :root {
+            --bg-base: #030303;
+            --accent-green: #4ade80;
+            --accent-blue: #38bdf8;
+            --accent-amber: #f59e0b;
+            --border-color: #1c1c1e;
+            --card-bg: #09090b;
+        }
+
+        body {
+            font-family: 'Inter', 'Noto Sans JP', sans-serif;
+            background-color: var(--bg-base);
+            color: #f3f4f6;
+            letter-spacing: 0.05em;
+            overflow-x: hidden;
+        }
+
+        .mono-font {
+            font-family: 'Courier Prime', 'Courier', monospace;
+        }
+
+        .cyber-grid {
+            background-size: 40px 40px;
+            background-image:
+                linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+        }
+
+        .glass-panel {
+            background: rgba(9, 9, 11, 0.7);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--border-color);
+        }
+
+        /* Access key pulse */
+        .pulse-border {
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.2);
+            animation: pulse 2s infinite alternate;
+        }
+
+        @keyframes pulse {
+            0% {
+                border-color: rgba(56, 189, 248, 0.3);
+            }
+
+            100% {
+                border-color: rgba(56, 189, 248, 0.7);
+            }
+        }
+
+        /* Decrypt Terminal typing effect */
+        .cursor-blink::after {
+            content: '_';
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink {
+            50% {
+                opacity: 0;
+            }
+        }
+
+        /* Smooth file display transitions */
+        #viewer-container {
+            animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(4px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        ::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #030303;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #222;
+        }
+    </style>
+</head>
+
+<body class="cyber-grid min-h-screen flex flex-col justify-between">
+
+    <!-- Decrypt Gate Screen -->
+    <div id="decrypt-gate" class="flex-grow flex items-center justify-center p-6 z-10">
+        <div class="glass-panel w-full max-w-lg p-8 md:p-12 pulse-border transition-all duration-500 rounded-lg">
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <div class="flex justify-center gap-3 mb-4">
+                    <div
+                        class="w-10 h-10 border border-sky-500/30 flex items-center justify-center bg-sky-950/20 text-sky-400">
+                        <i class="fas fa-network-wired text-xl"></i>
+                    </div>
+                </div>
+                <h1 class="text-xs uppercase tracking-[0.4em] text-slate-500 mb-1">Internal Encryption Gateway</h1>
+                <h2 class="text-xl font-bold tracking-[0.2em] uppercase text-white">E4 CLOUD DECRYPTOR</h2>
+            </div>
+
+            <!-- Terminal status info -->
+            <div
+                class="bg-black/60 border border-white/5 p-4 rounded mb-6 text-[10px] text-slate-400 mono-font space-y-1">
+                <p><span class="text-sky-400">SYS_STATUS:</span> SECURED_ARCHIVE</p>
+                <p><span class="text-sky-400">FILER_SCAN:</span> DYNAMIC_DIRECTORY_SCAN</p>
+                <p><span class="text-sky-400">CONFIG:</span> SETTING.JS_ACTIVE</p>
+                <p id="gate-sys-time"></p>
+            </div>
+
+            <!-- Input area -->
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-[10px] text-slate-500 uppercase tracking-widest mb-2">Enter Administrative
+                        Access Key</label>
+                    <div class="relative">
+                        <input type="password" id="access-key"
+                            class="w-full bg-black/80 border border-white/10 px-4 py-3 text-sm tracking-widest text-sky-400 focus:outline-none focus:border-sky-500 rounded mono-font"
+                            placeholder="••••••••••••" onkeydown="if(event.key === 'Enter') attemptDecryption()">
+                        <div class="absolute right-3 top-3.5 text-slate-600 hover:text-slate-400 cursor-pointer"
+                            onclick="togglePasswordVisibility()">
+                            <i id="eye-icon" class="fas fa-eye"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <button onclick="attemptDecryption()"
+                    class="w-full bg-sky-600 hover:bg-sky-500 text-white font-bold text-xs uppercase tracking-widest py-4 transition duration-300 rounded border border-sky-400/20">
+                    DECODE DATA
+                </button>
+
+                <!-- Status Feedback -->
+                <div id="decrypt-feedback" class="text-center text-xs h-6 font-bold mono-font"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Decrypted Main Storage Dashboard -->
+    <div id="storage-dashboard" class="hidden flex-grow flex-col z-10">
+        <!-- Header -->
+        <header class="border-b border-white/10 bg-black/80 backdrop-filter blur-md sticky top-0 z-50">
+            <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <span class="text-sm font-bold tracking-[0.3em] text-white">E4 CLOUD</span>
+                    <span
+                        class="text-[9px] text-slate-500 border-l border-white/10 pl-4 py-1 uppercase tracking-widest mono-font hidden sm:inline-block">AUTHORIZED
+                        PHYSICAL AUTOSCAN</span>
+                </div>
+                <div class="flex items-center gap-6">
+                    <span
+                        class="text-[10px] text-emerald-400 bg-emerald-950/20 border border-emerald-500/20 px-3 py-1 uppercase tracking-widest font-mono hidden md:inline-block">
+                        <i class="fas fa-circle-check mr-2"></i>DECRYPTED_SESSION
+                    </span>
+                    <button onclick="lockStorage()"
+                        class="text-[10px] bg-red-950/20 border border-red-500/20 hover:bg-red-900/20 text-red-400 px-4 py-2 hover:border-red-400 transition tracking-widest uppercase font-bold">
+                        <i class="fas fa-power-off mr-2"></i>RESET AUTH
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Body -->
+        <main class="max-w-7xl w-full mx-auto px-6 py-12 flex-grow flex flex-col md:flex-row gap-8">
+            <!-- Sidebar Left: User Tab Selector -->
+            <div id="user-tabs"
+                class="w-full md:w-1/4 flex flex-row md:flex-col gap-2 overflow-x-auto md:overflow-x-visible pb-4 md:pb-0">
+                <!-- Dynamically Generated Tab Buttons -->
+            </div>
+
+            <!-- Content Area: Decoded User Archives & Filer -->
+            <div class="w-full md:w-3/4 flex-grow flex flex-col lg:flex-row gap-6">
+                <!-- Filer Navigation Column (Left of Right Area) -->
+                <div class="w-full lg:w-2/5 glass-panel p-6 rounded flex flex-col h-fit">
+                    <div class="border-b border-white/5 pb-4 mb-4 flex justify-between items-center">
+                        <span class="text-[10px] text-slate-500 uppercase tracking-widest font-mono">Archive
+                            Directories</span>
+                        <i class="fas fa-folder-tree text-slate-600 text-xs"></i>
+                    </div>
+
+                    <!-- File list tree -->
+                    <div id="file-tree" class="space-y-1 max-h-[350px] lg:max-h-[500px] overflow-y-auto pr-2">
+                        <!-- Dynamically Generated File Tree Nodes -->
+                    </div>
+                </div>
+
+                <!-- Main File Content Viewer Column (Right of Right Area) -->
+                <div class="w-full lg:w-3/5 flex flex-col">
+                    <div id="viewer-panel" class="glass-panel p-6 rounded flex-grow flex flex-col min-h-[400px]">
+                        <!-- Dynamic File Header -->
+                        <div id="viewer-header"
+                            class="border-b border-white/5 pb-4 mb-6 flex justify-between items-center">
+                            <div>
+                                <span id="viewer-status-tag"
+                                    class="text-[9px] px-2 py-0.5 border uppercase font-mono rounded">SYSTEM</span>
+                                <h4 id="viewer-file-title"
+                                    class="text-sm font-bold text-white tracking-widest mt-2 font-mono">SELECT A FILE
+                                </h4>
+                            </div>
+                        </div>
+
+                        <!-- Dynamic Viewer Container -->
+                        <div id="viewer-container" class="flex-grow flex flex-col justify-center">
+                            <!-- Dynamic Content (Text block or Image layout) -->
+                            <div class="text-center text-slate-600 py-12">
+                                <i class="far fa-folder-open text-5xl mb-4 opacity-40"></i>
+                                <p class="text-xs uppercase tracking-[0.2em] font-light">Select a file from the list to
+                                    decrypt</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer
+        class="p-8 border-t border-white/5 bg-black/40 text-slate-600 text-center text-[10px] tracking-widest uppercase mono-font">
+        &copy; E4 SECURE STORAGE PROTOCOL v6.0 // AUTOSCAN SYSTEM // DECODER: SYMBOLS.JS
+    </footer>
+
+    <!-- setting.js dynamic databases -->
+    <script src="setting.js"></script>
+
+    <!-- Symbols.js custom font parser loading -->
+    <script src="../scripts/symbols.js"></script>
+
+    <!-- UI Logic Script -->
+    <script>
+        let currentActiveUser = null;
+        let currentActiveFile = null;
+
+        // Live clock for Gateway Gate
+        function updateGateClock() {
+            const clockEl = document.getElementById('gate-sys-time');
+            if (clockEl) {
+                const now = new Date();
+                const year = now.getFullYear() + 19; // Offset for Year 2045
+                const dateStr = `${year}.${String(now.getMonth() + 1).padStart(2, '0')}.${String(now.getDate()).padStart(2, '0')}`;
+                const timeStr = now.toLocaleTimeString('ja-JP', { hour12: false });
+                clockEl.textContent = `TIME: ${dateStr} ${timeStr}`;
+            }
+        }
+        setInterval(updateGateClock, 1000);
+        updateGateClock();
+
+        // Check login state on load
+        window.addEventListener('DOMContentLoaded', () => {
+            const isAuth = localStorage.getItem('e4_auth');
+            if (isAuth === 'true') {
+                showDashboard();
+            }
+        });
+
+        function togglePasswordVisibility() {
+            const passInput = document.getElementById('access-key');
+            const eyeIcon = document.getElementById('eye-icon');
+            if (passInput.type === 'password') {
+                passInput.type = 'text';
+                eyeIcon.classList.remove('fa-eye');
+                eyeIcon.classList.add('fa-eye-slash');
+            } else {
+                passInput.type = 'password';
+                eyeIcon.classList.remove('fa-eye-slash');
+                eyeIcon.classList.add('fa-eye');
+            }
+        }
+
+        function attemptDecryption() {
+            const passInput = document.getElementById('access-key');
+            const feedback = document.getElementById('decrypt-feedback');
+            const password = passInput.value.trim().toLowerCase();
+            const config = window.E4_CLOUD_SETTINGS || { validPasswords: ['e4', 'admin'] };
+
+            if (!password) {
+                feedback.className = "text-center text-xs h-6 font-bold mono-font text-rose-400";
+                feedback.textContent = "KEY REQUIRED";
+                return;
+            }
+
+            feedback.className = "text-center text-xs h-6 font-bold mono-font text-sky-400 cursor-blink";
+            feedback.textContent = "DECRYPTING";
+
+            setTimeout(() => {
+                if (config.validPasswords.map(p => p.toLowerCase()).includes(password)) {
+                    feedback.className = "text-center text-xs h-6 font-bold mono-font text-emerald-400";
+                    feedback.textContent = "DECRYPT SUCCESS";
+
+                    localStorage.setItem('e4_auth', 'true');
+                    setTimeout(() => {
+                        showDashboard();
+                    }, 500);
+                } else {
+                    feedback.className = "text-center text-xs h-6 font-bold mono-font text-rose-400";
+                    feedback.textContent = "DECRYPT FAILED: ACCESS DENIED";
+                }
+            }, 800);
+        }
+
+        function showDashboard() {
+            document.getElementById('decrypt-gate').classList.add('hidden');
+            const dashboard = document.getElementById('storage-dashboard');
+            dashboard.classList.remove('hidden');
+            dashboard.classList.add('flex');
+
+            // Render dynamic tabs from setting.js
+            renderUserTabs();
+        }
+
+        function lockStorage() {
+            localStorage.removeItem('e4_auth');
+            document.getElementById('access-key').value = '';
+            document.getElementById('decrypt-feedback').textContent = '';
+
+            const dashboard = document.getElementById('storage-dashboard');
+            dashboard.classList.add('hidden');
+            dashboard.classList.remove('flex');
+            document.getElementById('decrypt-gate').classList.remove('hidden');
+        }
+
+        // Render Sidebar Tabs from config
+        function renderUserTabs() {
+            const config = window.E4_CLOUD_SETTINGS;
+            const container = document.getElementById('user-tabs');
+            container.innerHTML = '';
+
+            if (!config || !config.archives) return;
+
+            config.archives.forEach((user, index) => {
+                const btn = document.createElement('button');
+                btn.id = `tab-btn-${user.id}`;
+                btn.onclick = () => switchUserTab(user.id);
+                btn.className = `tab-btn flex-1 md:flex-none glass-panel p-5 text-left flex items-center gap-4 border-l-2 border-l-transparent hover:bg-white/5 transition group rounded-r`;
+
+                btn.innerHTML = `
+                    <div class="w-8 h-8 rounded-full border flex items-center justify-center text-sm group-hover:scale-105 transition-transform" 
+                         style="background: rgba(255,255,255,0.02); border-color: rgba(255,255,255,0.1); color: ${user.themeColor};">
+                        <i class="${user.icon}"></i>
+                    </div>
+                    <div>
+                        <div class="text-[10px] text-slate-500 uppercase tracking-widest font-mono">Archive #0${index + 1}</div>
+                        <div class="text-sm font-bold text-white uppercase tracking-wider">${user.name}</div>
+                    </div>
+                `;
+                container.appendChild(btn);
+            });
+
+            // Automatically switch to the first user
+            if (config.archives.length > 0) {
+                switchUserTab(config.archives[0].id);
+            }
+        }
+
+        // Switch Tab, Scan Directories and Render File Tree
+        async function switchUserTab(userId) {
+            currentActiveUser = userId;
+            const config = window.E4_CLOUD_SETTINGS;
+            const user = config.archives.find(u => u.id === userId);
+
+            // Update Tab Button styles
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(b => {
+                b.style.borderLeftColor = 'transparent';
+                b.style.background = 'rgba(9, 9, 11, 0.7)';
+            });
+
+            const activeBtn = document.getElementById(`tab-btn-${userId}`);
+            if (activeBtn) {
+                activeBtn.style.borderLeftColor = user.themeColor;
+                activeBtn.style.background = 'rgba(255, 255, 255, 0.03)';
+            }
+
+            // Display loading in file tree
+            const treeContainer = document.getElementById('file-tree');
+            treeContainer.innerHTML = `
+                <div class="text-[10px] text-slate-500 tracking-widest font-mono flex items-center gap-2 py-4">
+                    <i class="fas fa-spinner animate-spin"></i> SCANNING PHYSICAL /${userId}...
+                </div>
+            `;
+
+            // Scan directory
+            const files = await scanDirectory(userId);
+            renderFileTree(user, files);
+        }
+
+        // Auto-scan Physical Directory listing
+        async function scanDirectory(userId) {
+            try {
+                // Fetch the directory path
+                const response = await fetch(`./${userId}/`);
+                if (!response.ok) throw new Error("Directory access block");
+
+                const text = await response.text();
+
+                // Parse the directory index HTML (Python SimpleHTTPServer listing format)
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(text, 'text/html');
+                const links = doc.querySelectorAll('a');
+
+                const foundFiles = [];
+                links.forEach(a => {
+                    const href = a.getAttribute('href');
+                    if (!href) return;
+
+                    // Decode URI component (handle spaces etc.)
+                    const decodedHref = decodeURIComponent(href);
+
+                    // Filter out parent directory links, folders, hidden files, or setting configs
+                    if (decodedHref === '../' || decodedHref === '/' || decodedHref.startsWith('.') || decodedHref.endsWith('/')) {
+                        return;
+                    }
+
+                    // Determine file type by extension
+                    const ext = decodedHref.substring(decodedHref.lastIndexOf('.')).toLowerCase();
+                    const isImg = ['.png', '.jpg', '.jpeg', '.gif', '.webp', '.svg'].includes(ext);
+
+                    foundFiles.push({
+                        name: `/${userId}/${decodedHref}`,
+                        realPath: `./${userId}/${decodedHref}`,
+                        type: isImg ? 'image' : 'text',
+                        isDummy: false
+                    });
+                });
+
+                return foundFiles;
+            } catch (err) {
+                console.warn(`[e4cloud] Directory listing failed for /${userId}/, falling back to dynamic instructions.`, err);
+                return getDummyFiles(userId);
+            }
+        }
+
+        // Fallback guidelines if folders are physically empty or HTTP scanning isn't supported
+        function getDummyFiles(userId) {
+            if (userId === 'aria') {
+                return [
+                    {
+                        name: `/aria/WAC_System_Audit_Report.log`,
+                        type: 'text',
+                        isDummy: true,
+                        dummyContent: `[監査ログ: SEC_AUDIT_#9032]\n\n:ced_foundation: の内部熱量および演算ポテンシャルにわずかなノイズが発生。\n記号標準化プロトコル :censorship: の発動後も、監視領域における未認可シンボルの発生は沈静化していない。\n\nこれは単純なバグではなく、外部からの意図的な記号侵食、すなわち作家 :artist_r: による「実存偽装」である可能性が極めて高い。\n\nWACによる :truth_key: の隠蔽は継続されているが、それを探し求める勢力の存在を感知している。引き続き、指定ネットワークのログ監査を継続する。`
+                    },
+                    {
+                        name: `/aria/aria_portrait.png`,
+                        type: 'image',
+                        isDummy: true,
+                        realPath: 'aria.png' // points to setting.js avatar
+                    },
+                    {
+                        name: `/aria/HOW_TO_ADD_FILES.txt`,
+                        type: 'text',
+                        isDummy: true,
+                        dummyContent: `[E4 CLOUD - 物理フォルダ自動検出ガイド]\n\nすみません、このアーカイブ /aria は現在物理的に空です。\n\n【ファイルを読み込ませる方法】\n1. このプロジェクトのフォルダ \`/Users/rituto/Documents/GitHub/e4cloud/aria/\` を開く。\n2. そこに \`.txt\` や \`.log\` などの文書ファイル、または \`.png\` 等の画像ファイルを保存する。\n3. ブラウザをリロードすると、自動的にその物理ファイルがスキャンされ、ここに表示・解読されます！`
+                    }
+                ];
+            } else if (userId === 'may') {
+                return [
+                    {
+                        name: `/may/rittsu_and_home.txt`,
+                        type: 'text',
+                        isDummy: true,
+                        dummyContent: `[メイの日記: りっつーとの暮らし]\n\n今日も朝起きたら、りっつーはまた机で難しそうなバイナリのデータとにらめっこしてた。\n私がお腹空いたアピールをすると、りっつーは苦笑いしながら美味しい朝ごはんを作ってくれた！やっぱりりっつーのスープは最高だな！\n\nりっつーと一緒に暮らし始めてから、WAC of 監視用ドローンの変な音にもすぐ気づくようになったよ。\n私たちの家を狙っているのかな？でも、メイが隣にいる限り、絶対にりっつーに手出しはさせないもんね！ :burst_ex:\n\n夜遅くに時々こっそり散歩に行きたくなっちゃうけど、りっつーが心配するから最近はリビングで一緒にゴロゴロしてる時間がお気に入り。 :tired_ex:\nりっつーと一緒のご飯と布団が、メイにとって一番安心できる場所なんだ。`
+                    },
+                    {
+                        name: `/may/lupine_sensory_log.txt`,
+                        type: 'text',
+                        isDummy: true,
+                        dummyContent: `[感覚ログ #1402]\n\nりっつーと暮らしている部屋の窓から、ONVAの境界線付近の非常に強い「記号の揺らぎ」を感知した。\nこれはかつてリタレンが体験した「記録の壁」に類似する振動だ。\nWACの解析センサーが私たちの家を覆い尽くす前に、気配を完全に遮断する。\n\n私たちがこの世界で「ぞんざい」にあり続けるためには、完璧な観察に抵抗し続けなければならない。りっつーを守るために、私のこの耳と鼻は研ぎ澄まされている。`
+                    },
+                    {
+                        name: `/may/mayrittu_original.png`,
+                        type: 'image',
+                        isDummy: true,
+                        realPath: 'may.png'
+                    },
+                    {
+                        name: `/may/HOW_TO_ADD_FILES.txt`,
+                        type: 'text',
+                        isDummy: true,
+                        dummyContent: `[E4 CLOUD - 物理フォルダ自動検出ガイド]\n\nすみません、このアーカイブ /may は現在物理的に空です。\n\n【ファイルを読み込ませる方法】\n1. このプロジェクトのフォルダ \`/Users/rituto/Documents/GitHub/e4cloud/may/\` を開く。\n2. そこにメイの日記テキストや画像を保存する。\n3. ブラウザをリロードすると、自動的にその物理ファイルがスキャンされ、ここに表示・解読されます！`
+                    }
+                ];
+            } else if (userId === 'syuren') {
+                return [
+                    {
+                        name: `/syuren/Waon_Protocol_Analysis.log`,
+                        type: 'text',
+                        isDummy: true,
+                        dummyContent: `[研究記録: WAON_PROTO_#08]\n\n和温陣国の古代より伝わる「‽（インテロバング）の杖」の構造解析がほぼ完了した。\nこの杖が放つ調和と均衡の波形は、:node_labo: が保有する高負荷演算コアでさえシミュレート不能な :labyrinth_qu: に類似する。\n\n魔王と職人が和解の際に交わした契約 of パラメータは、デジタルな記号に変換されることでその強度を損なっていない。\n共鳴感嘆符 :resonance_ex: の波動を利用し、データ領域における歪みを「可塑的に」和温へと復元する。\n\nこの発見をWACの統合監査機構に発見されるのは極めて不都合だ。本データはE4ストレージの最も深いセクターへと隔離する。`
+                    },
+                    {
+                        name: `/syuren/engineering_notes.txt`,
+                        type: 'text',
+                        isDummy: true,
+                        dummyContent: `[職人シュレンの開発手記]\n\n道具は、合理的な美学のためにあるのではない。むしろ道具そのものが「問い」であり、それを携える人の「実存」を補強するものだ。\n\nONVAの車輪生物（コロレン）の効率的な回転性能を応用し、和温の演算ノードの放熱フィンを設計した。非常に満足のいく結果を得られた。`
+                    },
+                    {
+                        name: `/syuren/syuren_schematic.png`,
+                        type: 'image',
+                        isDummy: true,
+                        realPath: 'syuren.png'
+                    },
+                    {
+                        name: `/syuren/HOW_TO_ADD_FILES.txt`,
+                        type: 'text',
+                        isDummy: true,
+                        dummyContent: `[E4 CLOUD - 物理フォルダ自動検出ガイド]\n\nすみません、このアーカイブ /syuren は現在物理的に空です。\n\n【ファイルを読み込ませる方法】\n1. このプロジェクトのフォルダ \`/Users/rituto/Documents/GitHub/e4cloud/syuren/\` を開く。\n2. そこにシュレンの技術メモや画像を保存する。\n3. ブラウザをリロードすると、自動的にその物理ファイルがスキャンされ、ここに表示・解読されます！`
+                    }
+                ];
+            }
+            return [];
+        }
+
+        // Render File Tree list (エクスプローラー)
+        function renderFileTree(user, files) {
+            const treeContainer = document.getElementById('file-tree');
+            treeContainer.innerHTML = '';
+
+            // Directory Title
+            const dirNode = document.createElement('div');
+            dirNode.className = "flex items-center gap-2 text-xs font-bold text-slate-400 uppercase tracking-widest mb-3";
+            dirNode.innerHTML = `<i class="far fa-folder-open" style="color: ${user.themeColor};"></i> <span>/${user.id}</span>`;
+            treeContainer.appendChild(dirNode);
+
+            if (files.length === 0) {
+                // Completely empty fallback
+                const emptyNode = document.createElement('div');
+                emptyNode.className = "text-[10px] text-slate-600 italic py-2 pl-4";
+                emptyNode.textContent = "Directory is empty";
+                treeContainer.appendChild(emptyNode);
+
+                // Load empty viewer notice
+                const viewerContainer = document.getElementById('viewer-container');
+                viewerContainer.innerHTML = `
+                    <div class="text-center text-slate-600 py-12">
+                        <i class="far fa-folder-open text-5xl mb-4 opacity-40" style="color: ${user.themeColor}; opacity: 0.3;"></i>
+                        <p class="text-xs uppercase tracking-[0.2em] font-light">Folder is empty</p>
+                        <p class="text-[9px] text-slate-500 mt-2 font-mono">Place .txt or .png files into "e4cloud/${user.id}/"</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // File items
+            files.forEach(file => {
+                const basename = file.name.substring(file.name.lastIndexOf('/') + 1);
+                const fileBtn = document.createElement('button');
+                fileBtn.id = `file-node-${file.name.replace(/\//g, '_').replace(/\./g, '_')}`;
+                fileBtn.onclick = () => selectFile(file, user);
+                fileBtn.className = "w-full text-left py-2 px-3 pl-6 text-xs flex items-center justify-between text-slate-400 hover:text-white hover:bg-white/5 transition rounded mono-font";
+
+                let icon = '<i class="far fa-file-alt mr-2 opacity-60"></i>';
+                if (file.type === 'image') {
+                    icon = '<i class="far fa-file-image mr-2 opacity-60"></i>';
+                }
+
+                fileBtn.innerHTML = `
+                    <span class="flex items-center truncate">${icon} ${basename}</span>
+                    <span class="text-[8px] opacity-40 uppercase tracking-tighter">${file.isDummy ? 'virtual' : file.type}</span>
+                `;
+                treeContainer.appendChild(fileBtn);
+            });
+
+            // Auto-select first file in scanned directory
+            if (files.length > 0) {
+                selectFile(files[0], user);
+            }
+        }
+
+        // Select and Decrypt File inside viewer
+        async function selectFile(file, user) {
+            currentActiveFile = file;
+
+            // Highlight in tree list
+            const allNodes = document.querySelectorAll('#file-tree button');
+            allNodes.forEach(node => {
+                node.className = "w-full text-left py-2 px-3 pl-6 text-xs flex items-center justify-between text-slate-400 hover:text-white hover:bg-white/5 transition rounded mono-font";
+                node.style.background = 'transparent';
+                node.style.color = '';
+            });
+
+            const nodeId = `file-node-${file.name.replace(/\//g, '_').replace(/\./g, '_')}`;
+            const activeNode = document.getElementById(nodeId);
+            if (activeNode) {
+                activeNode.style.background = 'rgba(255, 255, 255, 0.05)';
+                activeNode.style.color = user.themeColor;
+            }
+
+            // Load to Viewer
+            const headerTag = document.getElementById('viewer-status-tag');
+            const fileTitle = document.getElementById('viewer-file-title');
+            const viewerContainer = document.getElementById('viewer-container');
+
+            headerTag.textContent = user.status;
+            headerTag.style.borderColor = user.themeColor;
+            headerTag.style.color = user.themeColor;
+            headerTag.style.background = `rgba(${hexToRgb(user.themeColor)}, 0.1)`;
+
+            fileTitle.textContent = file.name;
+
+            // Render view dynamic content
+            viewerContainer.innerHTML = `
+                <div class="text-center text-slate-500 py-12 mono-font text-xs cursor-blink">
+                    DECRYPTING STREAM...
+                </div>
+            `;
+
+            try {
+                let contentHTML = '';
+
+                if (file.type === 'text') {
+                    let content = '';
+                    if (file.isDummy) {
+                        content = file.dummyContent;
+                    } else {
+                        // Fetch actual file content dynamically
+                        const res = await fetch(file.realPath);
+                        if (!res.ok) throw new Error("Fetch failed");
+                        content = await res.text();
+                    }
+
+                    contentHTML = `
+                        <div class="flex-grow flex flex-col">
+                            <div class="bg-black/60 border border-white/5 p-6 rounded flex-grow font-light text-sm text-slate-300 leading-relaxed overflow-y-auto max-h-[450px] whitespace-pre-wrap relative">
+                                <div class="absolute top-2 right-2 flex gap-2">
+                                    <span class="text-[8px] uppercase tracking-widest font-mono text-slate-600 bg-white/5 px-2 py-0.5 border border-white/10 rounded">${file.isDummy ? 'VIRTUAL_DECODED' : 'PHYSICAL_DECODED'}</span>
+                                </div>
+                                <div id="text-content-box">${escapeHTML(content)}</div>
+                            </div>
+                        </div>
+                    `;
+                } else if (file.type === 'image') {
+                    contentHTML = `
+                        <div class="flex-grow flex flex-col justify-center items-center py-4">
+                            <div class="relative max-w-sm w-full aspect-[4/5] bg-neutral-900 border border-white/10 overflow-hidden flex items-center justify-center rounded">
+                                <img src="${file.realPath}" alt="${file.name}" class="w-full h-full object-cover grayscale-[0.2] hover:grayscale-0 transition duration-700" onerror="this.parentElement.innerHTML='<div class=\\'text-slate-700 text-center p-4\\'><i class=\\'fas fa-file-image text-5xl mb-4\\'></i><p class=\\'text-[10px] tracking-widest uppercase\\'>IMAGE_NOT_LOADED<br>Path: ${file.realPath}</p></div>'">
+                                <div class="absolute bottom-2 left-2 text-[8px] bg-black/80 text-slate-400 px-2 py-0.5 border border-white/10 font-bold uppercase tracking-widest font-mono">STREAM_SECURED</div>
+                            </div>
+                            <div class="mt-4 text-center">
+                                <p class="text-[10px] text-slate-500 uppercase tracking-widest font-mono">${user.description}</p>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                viewerContainer.innerHTML = contentHTML;
+            } catch (err) {
+                viewerContainer.innerHTML = `
+                    <div class="text-center text-rose-400 py-12 mono-font text-xs">
+                        <i class="fas fa-triangle-exclamation text-3xl mb-4 block"></i>
+                        DECRYPTION PROTOCOL FAILED FOR ${file.name.substring(file.name.lastIndexOf('/') + 1)}
+                    </div>
+                `;
+            }
+
+            // Trigger symbol processing on the viewer container
+            if (window.symbols && typeof window.symbols.processNode === 'function') {
+                window.symbols.processNode(viewerContainer);
+            }
+        }
+
+        // Helper: Hex to RGB Converter
+        function hexToRgb(hex) {
+            hex = hex.replace('#', '');
+            let r = parseInt(hex.substring(0, 2), 16);
+            let g = parseInt(hex.substring(2, 4), 16);
+            let b = parseInt(hex.substring(4, 6), 16);
+            return `${r}, ${g}, ${b}`;
+        }
+
+        // Helper: Escape HTML strings
+        function escapeHTML(str) {
+            return str
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+    </script>
+</body>
+
+</html>
