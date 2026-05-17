@@ -250,6 +250,9 @@
     <!-- setting.js dynamic databases -->
     <script src="setting.js"></script>
 
+    <!-- Font JS (Font switching UI) -->
+    <script src="../scripts/font.js"></script>
+
     <!-- Symbols.js custom font parser loading -->
     <script src="../scripts/symbols.js"></script>
 
@@ -459,81 +462,8 @@
 
         // Fallback guidelines if folders are physically empty or HTTP scanning isn't supported
         function getDummyFiles(userId) {
-            if (userId === 'aria') {
-                return [
-                    {
-                        name: `/aria/WAC_System_Audit_Report.log`,
-                        type: 'text',
-                        isDummy: true,
-                        dummyContent: `[監査ログ: SEC_AUDIT_#9032]\n\n:ced_foundation: の内部熱量および演算ポテンシャルにわずかなノイズが発生。\n記号標準化プロトコル :censorship: の発動後も、監視領域における未認可シンボルの発生は沈静化していない。\n\nこれは単純なバグではなく、外部からの意図的な記号侵食、すなわち作家 :artist_r: による「実存偽装」である可能性が極めて高い。\n\nWACによる :truth_key: の隠蔽は継続されているが、それを探し求める勢力の存在を感知している。引き続き、指定ネットワークのログ監査を継続する。`
-                    },
-                    {
-                        name: `/aria/aria_portrait.png`,
-                        type: 'image',
-                        isDummy: true,
-                        realPath: 'aria.png' // points to setting.js avatar
-                    },
-                    {
-                        name: `/aria/HOW_TO_ADD_FILES.txt`,
-                        type: 'text',
-                        isDummy: true,
-                        dummyContent: `[E4 CLOUD - 物理フォルダ自動検出ガイド]\n\nすみません、このアーカイブ /aria は現在物理的に空です。\n\n【ファイルを読み込ませる方法】\n1. このプロジェクトのフォルダ \`/Users/rituto/Documents/GitHub/e4cloud/aria/\` を開く。\n2. そこに \`.txt\` や \`.log\` などの文書ファイル、または \`.png\` 等の画像ファイルを保存する。\n3. ブラウザをリロードすると、自動的にその物理ファイルがスキャンされ、ここに表示・解読されます！`
-                    }
-                ];
-            } else if (userId === 'may') {
-                return [
-                    {
-                        name: `/may/rittsu_and_home.txt`,
-                        type: 'text',
-                        isDummy: true,
-                        dummyContent: `[メイの日記: りっつーとの暮らし]\n\n今日も朝起きたら、りっつーはまた机で難しそうなバイナリのデータとにらめっこしてた。\n私がお腹空いたアピールをすると、りっつーは苦笑いしながら美味しい朝ごはんを作ってくれた！やっぱりりっつーのスープは最高だな！\n\nりっつーと一緒に暮らし始めてから、WAC of 監視用ドローンの変な音にもすぐ気づくようになったよ。\n私たちの家を狙っているのかな？でも、メイが隣にいる限り、絶対にりっつーに手出しはさせないもんね！ :burst_ex:\n\n夜遅くに時々こっそり散歩に行きたくなっちゃうけど、りっつーが心配するから最近はリビングで一緒にゴロゴロしてる時間がお気に入り。 :tired_ex:\nりっつーと一緒のご飯と布団が、メイにとって一番安心できる場所なんだ。`
-                    },
-                    {
-                        name: `/may/lupine_sensory_log.txt`,
-                        type: 'text',
-                        isDummy: true,
-                        dummyContent: `[感覚ログ #1402]\n\nりっつーと暮らしている部屋の窓から、ONVAの境界線付近の非常に強い「記号の揺らぎ」を感知した。\nこれはかつてリタレンが体験した「記録の壁」に類似する振動だ。\nWACの解析センサーが私たちの家を覆い尽くす前に、気配を完全に遮断する。\n\n私たちがこの世界で「ぞんざい」にあり続けるためには、完璧な観察に抵抗し続けなければならない。りっつーを守るために、私のこの耳と鼻は研ぎ澄まされている。`
-                    },
-                    {
-                        name: `/may/mayrittu_original.png`,
-                        type: 'image',
-                        isDummy: true,
-                        realPath: 'may.png'
-                    },
-                    {
-                        name: `/may/HOW_TO_ADD_FILES.txt`,
-                        type: 'text',
-                        isDummy: true,
-                        dummyContent: `[E4 CLOUD - 物理フォルダ自動検出ガイド]\n\nすみません、このアーカイブ /may は現在物理的に空です。\n\n【ファイルを読み込ませる方法】\n1. このプロジェクトのフォルダ \`/Users/rituto/Documents/GitHub/e4cloud/may/\` を開く。\n2. そこにメイの日記テキストや画像を保存する。\n3. ブラウザをリロードすると、自動的にその物理ファイルがスキャンされ、ここに表示・解読されます！`
-                    }
-                ];
-            } else if (userId === 'syuren') {
-                return [
-                    {
-                        name: `/syuren/Waon_Protocol_Analysis.log`,
-                        type: 'text',
-                        isDummy: true,
-                        dummyContent: `[研究記録: WAON_PROTO_#08]\n\n和温陣国の古代より伝わる「‽（インテロバング）の杖」の構造解析がほぼ完了した。\nこの杖が放つ調和と均衡の波形は、:node_labo: が保有する高負荷演算コアでさえシミュレート不能な :labyrinth_qu: に類似する。\n\n魔王と職人が和解の際に交わした契約 of パラメータは、デジタルな記号に変換されることでその強度を損なっていない。\n共鳴感嘆符 :resonance_ex: の波動を利用し、データ領域における歪みを「可塑的に」和温へと復元する。\n\nこの発見をWACの統合監査機構に発見されるのは極めて不都合だ。本データはE4ストレージの最も深いセクターへと隔離する。`
-                    },
-                    {
-                        name: `/syuren/engineering_notes.txt`,
-                        type: 'text',
-                        isDummy: true,
-                        dummyContent: `[職人シュレンの開発手記]\n\n道具は、合理的な美学のためにあるのではない。むしろ道具そのものが「問い」であり、それを携える人の「実存」を補強するものだ。\n\nONVAの車輪生物（コロレン）の効率的な回転性能を応用し、和温の演算ノードの放熱フィンを設計した。非常に満足のいく結果を得られた。`
-                    },
-                    {
-                        name: `/syuren/syuren_schematic.png`,
-                        type: 'image',
-                        isDummy: true,
-                        realPath: 'syuren.png'
-                    },
-                    {
-                        name: `/syuren/HOW_TO_ADD_FILES.txt`,
-                        type: 'text',
-                        isDummy: true,
-                        dummyContent: `[E4 CLOUD - 物理フォルダ自動検出ガイド]\n\nすみません、このアーカイブ /syuren は現在物理的に空です。\n\n【ファイルを読み込ませる方法】\n1. このプロジェクトのフォルダ \`/Users/rituto/Documents/GitHub/e4cloud/syuren/\` を開く。\n2. そこにシュレンの技術メモや画像を保存する。\n3. ブラウザをリロードすると、自動的にその物理ファイルがスキャンされ、ここに表示・解読されます！`
-                    }
-                ];
+            if (window.E4_CLOUD_SETTINGS && window.E4_CLOUD_SETTINGS.predefinedFiles && window.E4_CLOUD_SETTINGS.predefinedFiles[userId]) {
+                return window.E4_CLOUD_SETTINGS.predefinedFiles[userId];
             }
             return [];
         }
@@ -637,20 +567,25 @@
 
                 if (file.type === 'text') {
                     let content = '';
-                    if (file.isDummy) {
-                        content = file.dummyContent;
-                    } else {
-                        // Fetch actual file content dynamically
+                    let isFallback = false;
+                    try {
                         const res = await fetch(file.realPath);
-                        if (!res.ok) throw new Error("Fetch failed");
-                        content = await res.text();
+                        if (!res.ok) {
+                            content = `[E4 CLOUD - FILE NOT FOUND]\n\n指定されたファイルが見つかりません。\nパス: ${file.realPath}\n\n物理ディレクトリ（/e4cloud/）内にファイルを作成すると、ここに自動で表示・同期されます。`;
+                            isFallback = true;
+                        } else {
+                            content = await res.text();
+                        }
+                    } catch (e) {
+                        content = `[E4 CLOUD - FETCH FAILED]\n\nファイルの読み込み中にエラーが発生しました。\nパス: ${file.realPath}`;
+                        isFallback = true;
                     }
 
                     contentHTML = `
                         <div class="flex-grow flex flex-col">
                             <div class="bg-black/60 border border-white/5 p-6 rounded flex-grow font-light text-sm text-slate-300 leading-relaxed overflow-y-auto max-h-[450px] whitespace-pre-wrap relative">
                                 <div class="absolute top-2 right-2 flex gap-2">
-                                    <span class="text-[8px] uppercase tracking-widest font-mono text-slate-600 bg-white/5 px-2 py-0.5 border border-white/10 rounded">${file.isDummy ? 'VIRTUAL_DECODED' : 'PHYSICAL_DECODED'}</span>
+                                    <span class="text-[8px] uppercase tracking-widest font-mono ${isFallback ? 'text-rose-400' : 'text-slate-600'} bg-white/5 px-2 py-0.5 border border-white/10 rounded">${isFallback ? 'NOT_FOUND' : 'PHYSICAL_DECODED'}</span>
                                 </div>
                                 <div id="text-content-box">${escapeHTML(content)}</div>
                             </div>
