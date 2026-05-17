@@ -63,6 +63,86 @@ window.E4_CLOUD_SETTINGS = {
             description: '13歳のウォーウルフの学生・生物図鑑作成者'
         },
         {
+            id: 'vincent',
+            name: 'Vincent (ヴィンセント)',
+            icon: 'fas fa-code',
+            color: 'slate',
+            themeColor: '#64748b',
+            avatar: 'vincent.png',
+            status: 'LANGUAGE_BUREAU',
+            description: 'ONVA中央言語局・主任研究員。極度の論理至上主義者。'
+        },
+        {
+            id: 'zero',
+            name: 'Zero (ゼロ)',
+            icon: 'fas fa-traffic-light',
+            color: 'yellow',
+            themeColor: '#facc15',
+            avatar: 'zero.png',
+            status: 'TRAFFIC_CONTROL_SYS',
+            description: '物理体を持たないバイナリ生命体・交通制御システム。'
+        },
+        {
+            id: 'felix',
+            name: 'Felix (フェリックス)',
+            icon: 'fas fa-shop',
+            color: 'purple',
+            themeColor: '#a855f7',
+            avatar: 'felix.png',
+            status: 'ANTIQUE_SHOP',
+            description: '200歳以上のアンティークショップ店主。常に霧をまとっている。'
+        },
+        {
+            id: 'noah',
+            name: 'Noah (ノア)',
+            icon: 'fas fa-plug',
+            color: 'blue',
+            themeColor: '#3b82f6',
+            avatar: 'noah.png',
+            status: 'ENERGY_AI',
+            description: 'エネルギー配分最適化AI。無駄な電力を物理的に排除する。'
+        },
+        {
+            id: 'kai',
+            name: 'Kai (カイ)',
+            icon: 'fas fa-ear-listen',
+            color: 'orange',
+            themeColor: '#f97316',
+            avatar: 'kai.png',
+            status: 'MACHINE_LINGUIST',
+            description: '61歳の人間。機械と話しすぎて相槌が電子音になった言語学者。'
+        },
+        {
+            id: 'karen',
+            name: 'Karen (カレン)',
+            icon: 'fas fa-cubes',
+            color: 'pink',
+            themeColor: '#ec4899',
+            avatar: 'karen.png',
+            status: 'VIRTUAL_DESIGNER',
+            description: '21歳の人間・仮想空間設計士。現実の物理法則を「面倒」と感じている。'
+        },
+        {
+            id: 'maria',
+            name: 'Maria (マリア)',
+            icon: 'fas fa-pen-clip',
+            color: 'emerald',
+            themeColor: '#10b981',
+            avatar: 'maria.png',
+            status: 'WAC_RECORDER',
+            description: '11歳の人間・WAC記録官。何でもメモを取る記録魔。'
+        },
+        {
+            id: 'yuris',
+            name: 'Yuris (ユリス)',
+            icon: 'fas fa-database',
+            color: 'cyan',
+            themeColor: '#06b6d4',
+            avatar: 'yuris.png',
+            status: 'MEMORY_LIBRARIAN',
+            description: 'バイナリ・記憶保管庫の司書。嬉しいと発光パターンが変わる。'
+        },
+        {
             id: 'bart',
             name: 'Bart (バルト)',
             icon: 'fas fa-leaf',
@@ -81,6 +161,36 @@ window.E4_CLOUD_SETTINGS = {
             avatar: 'rittsu.png',
             status: 'UNOFFICIAL_ACCESS',
             description: 'フリーランスハッカー・Same-Art Writer R'
+        },
+        {
+            id: 'litaran',
+            name: 'Litaran (リタラン)',
+            icon: 'fas fa-terminal',
+            color: 'zinc',
+            themeColor: '#71717a',
+            avatar: 'litaran.png',
+            status: 'LEGACY_DATA',
+            description: '初代 Same-Art Writer R（りっつーの父親）の遺したログ'
+        },
+        {
+            id: 'ajen',
+            name: 'Ajen (ア゛ジェン)',
+            icon: 'fas fa-bolt',
+            color: 'teal',
+            themeColor: '#14b8a6',
+            avatar: 'ajen.png',
+            status: 'STUDENT_LOG',
+            description: '17歳のウォーウルフの学生。考えるよりも直感で行動する。'
+        },
+        {
+            id: 'shakan',
+            name: 'Shakan (シャカン)',
+            icon: 'fas fa-music',
+            color: 'cyan',
+            themeColor: '#06b6d4',
+            avatar: 'shakan.png',
+            status: 'MUSICIAN_LOG',
+            description: '38歳のウォーウルフの音楽家。ボーカロイドより正確な音程で歌う。'
         }
     ],
 
@@ -97,6 +207,8 @@ window.E4_CLOUD_SETTINGS = {
             { name: `/may/rittsu_and_home.txt`, type: 'text', realPath: 'may/rittsu_and_home.txt' },
             { name: `/may/lupine_sensory_log.txt`, type: 'text', realPath: 'may/lupine_sensory_log.txt' },
             { name: `/may/midnight_snack.txt`, type: 'text', realPath: 'may/midnight_snack.txt' },
+            { name: `/may/potato_delivery.txt`, type: 'text', realPath: 'may/potato_delivery.txt' },
+            { name: `/may/secret_training.txt`, type: 'text', realPath: 'may/secret_training.txt' },
             { name: `/may/may.png`, type: 'image', realPath: 'may/may.png' }
         ],
         syuren: [
@@ -125,6 +237,50 @@ window.E4_CLOUD_SETTINGS = {
         rittsu: [
             { name: `/rittsu/memo_about_may.txt`, type: 'text', realPath: 'rittsu/memo_about_may.txt' },
             { name: `/rittsu/rittsu.png`, type: 'image', realPath: 'rittsu/rittsu.png' }
+        ],
+        litaran: [
+            { name: `/litaran/legacy_memo.txt`, type: 'text', realPath: 'litaran/legacy_memo.txt' },
+            { name: `/litaran/litaran.png`, type: 'image', realPath: 'litaran/litaran.png' }
+        ],
+        ajen: [
+            { name: `/ajen/action_log.txt`, type: 'text', realPath: 'ajen/action_log.txt' },
+            { name: `/ajen/ajen.png`, type: 'image', realPath: 'ajen/ajen.png' }
+        ],
+        shakan: [
+            { name: `/shakan/music_creation_log.txt`, type: 'text', realPath: 'shakan/music_creation_log.txt' },
+            { name: `/shakan/shakan.png`, type: 'image', realPath: 'shakan/shakan.png' }
+        ],
+        vincent: [
+            { name: `/vincent/binary_memos.txt`, type: 'text', realPath: 'vincent/binary_memos.txt' },
+            { name: `/vincent/vincent.png`, type: 'image', realPath: 'vincent/vincent.png' }
+        ],
+        zero: [
+            { name: `/zero/traffic_log.txt`, type: 'text', realPath: 'zero/traffic_log.txt' },
+            { name: `/zero/zero.png`, type: 'image', realPath: 'zero/zero.png' }
+        ],
+        felix: [
+            { name: `/felix/antique_shop_log.txt`, type: 'text', realPath: 'felix/antique_shop_log.txt' },
+            { name: `/felix/felix.png`, type: 'image', realPath: 'felix/felix.png' }
+        ],
+        noah: [
+            { name: `/noah/power_optimization.txt`, type: 'text', realPath: 'noah/power_optimization.txt' },
+            { name: `/noah/noah.png`, type: 'image', realPath: 'noah/noah.png' }
+        ],
+        kai: [
+            { name: `/kai/machine_language_research.txt`, type: 'text', realPath: 'kai/machine_language_research.txt' },
+            { name: `/kai/kai.png`, type: 'image', realPath: 'kai/kai.png' }
+        ],
+        karen: [
+            { name: `/karen/virtual_space_design.txt`, type: 'text', realPath: 'karen/virtual_space_design.txt' },
+            { name: `/karen/karen.png`, type: 'image', realPath: 'karen/karen.png' }
+        ],
+        maria: [
+            { name: `/maria/wac_record_log.txt`, type: 'text', realPath: 'maria/wac_record_log.txt' },
+            { name: `/maria/maria.png`, type: 'image', realPath: 'maria/maria.png' }
+        ],
+        yuris: [
+            { name: `/yuris/memory_vault_log.txt`, type: 'text', realPath: 'yuris/memory_vault_log.txt' },
+            { name: `/yuris/yuris.png`, type: 'image', realPath: 'yuris/yuris.png' }
         ]
     }
 };
