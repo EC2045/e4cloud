@@ -8,7 +8,7 @@
 
 window.E4_CLOUD_SETTINGS = {
     // パスワードリスト
-    validPasswords: ['admin', 'e4', '2045', 'r', 'aria', 'may', 'syuren', 'onva', 'wac', 'litaran', 'rittsu', ''],
+    validPasswords: ['admin', 'e4', '2045', 'r', 'aria', 'may', 'syuren', 'onva', 'wac', 'litaran', 'rittsu', 'rituto', 'Shun_00'],
 
     // アーカイブアカウントのメタデータ
     archives: [
@@ -191,7 +191,16 @@ window.E4_CLOUD_SETTINGS = {
             avatar: 'shakan.png',
             status: 'MUSICIAN_LOG',
             description: '38歳のウォーウルフの音楽家。ボーカロイドより正確な音程で歌う。'
-        }
+        }, {
+            id: 'rituto',
+            name: 'Ritsuto (りつと)',
+            icon: 'fas fa-bolt',
+            color: 'orange',
+            themeColor: '#f97316',
+            avatar: 'rituto.png',
+            status: 'GOD',
+            description: '暇つぶしでアクセスしたこの世界の創造主のうちの一人'
+        },
     ],
 
     // 物理フォルダが空の場合やスキャンに失敗したときに表示するデフォルトのファイル構成
@@ -205,6 +214,7 @@ window.E4_CLOUD_SETTINGS = {
             { name: `/aria/childhood_friend_memo.txt`, type: 'text', realPath: 'aria/childhood_friend_memo.txt' },
             { name: `/aria/god_encounter_log.txt`, type: 'text', realPath: 'aria/god_encounter_log.txt' },
             { name: `/aria/aria.png`, type: 'image', realPath: 'aria/aria.png' }
+            //true.txtはあえて表示しない
         ],
         may: [
             { name: `/may/rittsu_and_home.txt`, type: 'text', realPath: 'may/rittsu_and_home.txt' },
@@ -284,6 +294,10 @@ window.E4_CLOUD_SETTINGS = {
         yuris: [
             { name: `/yuris/memory_vault_log.txt`, type: 'text', realPath: 'yuris/memory_vault_log.txt' },
             { name: `/yuris/yuris.png`, type: 'image', realPath: 'yuris/yuris.png' }
+        ],
+        rituto: [
+            { name: `/rituto/first.txt`, type: 'text', realPath: 'rituto/first.txt' },
+            { name: `/rituto/rituto.png`, type: 'image', realPath: 'rituto/rituto.png' }
         ]
     }
 };
