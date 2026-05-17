@@ -201,6 +201,9 @@ window.E4_CLOUD_SETTINGS = {
             { name: `/aria/personal_memo.txt`, type: 'text', realPath: 'aria/personal_memo.txt' },
             { name: `/aria/aria_observed_data.txt`, type: 'text', realPath: 'aria/aria_observed_data.txt' },
             { name: `/aria/book_design_ideas.txt`, type: 'text', realPath: 'aria/book_design_ideas.txt' },
+            { name: `/aria/textbook_design_log.txt`, type: 'text', realPath: 'aria/textbook_design_log.txt' },
+            { name: `/aria/childhood_friend_memo.txt`, type: 'text', realPath: 'aria/childhood_friend_memo.txt' },
+            { name: `/aria/god_encounter_log.txt`, type: 'text', realPath: 'aria/god_encounter_log.txt' },
             { name: `/aria/aria.png`, type: 'image', realPath: 'aria/aria.png' }
         ],
         may: [
