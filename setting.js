@@ -222,6 +222,7 @@ window.E4_CLOUD_SETTINGS = {
             { name: `/may/midnight_snack.txt`, type: 'text', realPath: 'may/midnight_snack.txt' },
             { name: `/may/potato_delivery.txt`, type: 'text', realPath: 'may/potato_delivery.txt' },
             { name: `/may/secret_training.txt`, type: 'text', realPath: 'may/secret_training.txt' },
+            { name: `/may/past.txt`, type: 'text', realPath: 'may/past.txt' },
             { name: `/may/may.png`, type: 'image', realPath: 'may/may.png' }
         ],
         syuren: [
