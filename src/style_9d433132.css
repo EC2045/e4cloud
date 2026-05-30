@@ -1,0 +1,93 @@
+@import url('https://fonts.googleapis.com/css2?family=Courier+Prime&family=Inter:wght@300;400;700&family=Noto+Sans+JP:wght@300;400;700&display=swap');
+
+:root {
+    --bg-base: #030303;
+    --accent-green: #4ade80;
+    --accent-blue: #38bdf8;
+    --accent-amber: #f59e0b;
+    --border-color: #1c1c1e;
+    --card-bg: #09090b;
+}
+
+body {
+    font-family: 'Inter', 'Noto Sans JP', sans-serif;
+    background-color: var(--bg-base);
+    color: #f3f4f6;
+    letter-spacing: 0.05em;
+    overflow-x: hidden;
+}
+
+.mono-font {
+    font-family: 'Courier Prime', 'Courier', monospace;
+}
+
+.cyber-grid {
+    background-size: 40px 40px;
+    background-image:
+        linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+}
+
+.glass-panel {
+    background: rgba(9, 9, 11, 0.7);
+    backdrop-filter: blur(15px);
+    border: 1px solid var(--border-color);
+}
+
+/* Access key pulse */
+.pulse-border {
+    box-shadow: 0 0 15px rgba(56, 189, 248, 0.2);
+    animation: pulse 2s infinite alternate;
+}
+
+@keyframes pulse {
+    0% {
+        border-color: rgba(56, 189, 248, 0.3);
+    }
+
+    100% {
+        border-color: rgba(56, 189, 248, 0.7);
+    }
+}
+
+/* Decrypt Terminal typing effect */
+.cursor-blink::after {
+    content: '_';
+    animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+    50% {
+        opacity: 0;
+    }
+}
+
+/* Smooth file display transitions */
+#viewer-container {
+    animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(4px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+}
+
+::-webkit-scrollbar-track {
+    background: #030303;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #222;
+}
